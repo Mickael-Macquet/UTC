@@ -93,26 +93,31 @@ int main(void)
 					
 					//On attend la reception de message du type num_cli ( seul le client qui a fait la demande pourra donc le lire ).
 					msgrcv(id_msg,(void*)&msg,longmsg,num_cli,0);
-					printf("Je suis le client: %d\n Voici la liste des produits %s\n", num_cli,msg.product_list);
+					printf("Je suis le client: %d\n Voici la liste des produits \n %s\n", num_cli,msg.product_list);
 				}
 				else
 					printf("Il faut que je m'identifie d'abors\n");
 			}break;
 			case 0:
 			{
-				// Type 2 car on demande au serveur.
-				msg.type=2;
-				
-				//Question 2 ( voir serveur, demande de la liste )
-				msg.question=1;
-				
-				//On envoi le message.
-				msgsnd(id_msg,(void*)&msg,longmsg,0);
-				
-				//On attend la reception de message du type num_cli ( seul le client qui a fait la demande pourra donc le lire ).
-				msgrcv(id_msg,(void*)&msg,longmsg,num_cli,0);
-				
-				printf("J'ai dis au serveur Bye :p\n");
+				if(num_cli)
+				{
+					// Type 2 car on demande au serveur.
+					msg.type=2;
+					
+					//Question 2 ( voir serveur, demande de la liste )
+					msg.question=1;
+					
+					//On envoi le message.
+					msgsnd(id_msg,(void*)&msg,longmsg,0);
+					
+					//On attend la reception de message du type num_cli ( seul le client qui a fait la demande pourra donc le lire ).
+					msgrcv(id_msg,(void*)&msg,longmsg,num_cli,0);
+					
+					printf("J'ai dis au serveur Bye :p\n");
+				}
+				else
+					printf("J'ai rien fait du tout.Bye :p\n");
 			}break;
 		}
 	}
