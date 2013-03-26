@@ -94,13 +94,48 @@ int main(int argc, char *argv[]){
                     printobj(message);
                     sleep(1);
                 } 
-                printf("Serveur : Fin de la reception du flux de données\n");
-                close(sdctl);
-                exit(EXIT_SUCCESS);
+
+                //On modifie le dernier message recu.
+                sprintf(message.ident, "ident_o%d", 1);
+                sprintf(message.desc, "description_o%d", 1);
+                message.ii = 1*10+1;
+                message.jj = message.ii + 1;
+                message.dd = (1+1)*10 + 0.2345;
+                message.fndesc = 0;
+
+                printf("L'objet a renvoyer au client:");
+                printobj(message);
+                printf("\n");
+
+                //On va commencer par envoyer la taille de la structure.
+                //Donc le nombre d'octet que l'on va envoyer.
+                int taille = sizeof(message);
+
+                printf("Taille : %d\n", sizeof(message));
+                printf("On envoi la taille\n");
+                while(send(sdctl, &taille, taille, 0)<0)
+                    perror("Echec de l'envoi. On retente.");
                 
+                printf("On envoi l'objet\n");
+                while(send(sdctl, &message, sizeof(message), 0)<0)
+                    perror("Echec de l'envoi. On retente.");
+
+                int ret,fermeture;
+                printf("On attend une reponse du client pour fermer la connection\n");
+                ret = recv(sdctl, &fermeture, sizeof(int), 0);
+                if (fermeture != -1)
+                {
+                    printf("Serveur : Message inatendu de la part du client. Fermeture de la connection\n"); 
+                    close(sdctl);
+                    exit(-1);
+                }
+                else   
+                {
+                    printf("Serveur : Fin de la reception du flux de données. On ferme la connection\n");
+                    close(sdctl);
+                    exit(EXIT_SUCCESS);
+                }
             default:
-                //Le pere attend la fin du fils
-                //waitpid(pid, NULL, WUNTRACED);
                 close(sdctl);
         }
     }

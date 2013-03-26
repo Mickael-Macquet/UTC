@@ -57,10 +57,37 @@ int main(int argc, char *argv[]){
     //On envoi les données.
     for (i = 0; i < TABLEN; ++i)
     {
-        sleep(i);
         //Si l'envoi echou, on reesais.
         while(send(sd, (const void *)&tobj[i], sizeof(tobj[i]), 0)<0)
             perror("Echec de l'envoi. On retente.");
     }
+
+    //La structure dans laquel on recupere le resultat.
+    obj retour;
+
+    int taillemsg;
+
+    //On attend la reception de la taille du message suivant.
+    if(recv(sd, &taillemsg, sizeof(int), 0)==SOCKET_ERROR)
+    {
+        perror("Erreur dans la reception du message");
+        exit(-1);
+    }
+    printf("Taille du message a recevoir : %d\n", taillemsg);
+    
+    //On recupere le message suivant.
+    if(recv(sd, &retour, taillemsg, 0)==SOCKET_ERROR)
+    {
+        perror("Erreur dans la reception du message");
+        exit(-1);
+    }
+    printf("L'object recu est :\n");
+    printobj(retour);
+
+    int valeur_ret = -1;
+    //On signal au serveur que la connection peut etre fermé.
+    while(send(sd, &valeur_ret, sizeof(valeur_ret), 0)<0)
+        perror("Echec de l'envoi. On retente.");
+
     exit(EXIT_SUCCESS);
 }

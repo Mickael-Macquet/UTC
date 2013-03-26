@@ -3,5 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/mick/UTC/P2013/IA04/Calc-factoriel/lib/jade.jar"/>
+	<classpathentry kind="lib" path="/home/mick/UTC/P2013/IA04/Calc-factoriel/lib/jackson2.1.1/jackson-annotations-2.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/mick/UTC/P2013/IA04/Calc-factoriel/lib/jackson2.1.1/jackson-core-2.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/mick/UTC/P2013/IA04/Calc-factoriel/lib/jackson2.1.1/jackson-databind-2.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
